@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
-import javax.persistence.ConstraintMode;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -19,6 +18,8 @@ import javax.persistence.OneToMany;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue(value = "0")
 public class Customer {
@@ -32,12 +33,18 @@ public class Customer {
 	
 	private String surname;
 	
+	@OneToMany
+	@JoinColumn(name="doc_id", foreignKey = @ForeignKey(name="doc_id_fk"), nullable = true)
+	@JsonIgnore
+	private List<Document> documents;
+
+	
 	@NonNull
 	@DateTimeFormat(pattern = "ddMMyyyy")
 	private LocalDate birthDate;
 	
 	@OneToMany
-	@JoinColumn(name="address_id", foreignKey = @ForeignKey(name="addres_id_fk"), nullable = false)
+	@JoinColumn(name="address_id", foreignKey = @ForeignKey(name="addres_id_fk"), nullable = true)
 	private List<Address> addresses;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -91,5 +98,14 @@ public class Customer {
 	public void setNicks(List<String> nicks) {
 		this.nicks = nicks;
 	}
+
+	public List<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(List<Document> documents) {
+		this.documents = documents;
+	}
+
 
 }
