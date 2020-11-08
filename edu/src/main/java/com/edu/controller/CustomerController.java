@@ -68,10 +68,9 @@ public class CustomerController {
 	 * @param redirectAttributes
 	 * @return
 	 */
-	@PutMapping("/customer/{id}/pic")
-	public ResponseEntity<?> uploadPicture(@RequestParam("pic") MultipartFile pic, 
-								@PathVariable(required = false) String id,
-								RedirectAttributes redirectAttributes){
+	@PutMapping("/customer/{id}")
+	public ResponseEntity<?> uploadPicture(@RequestParam(name = "pic", required = false) MultipartFile pic, 
+								@PathVariable(required = false) String id){
 		
 		service.addDocument(id, pic);
 		return ResponseEntity.ok("File "+ pic.getOriginalFilename()+ "successfully uploaded");
