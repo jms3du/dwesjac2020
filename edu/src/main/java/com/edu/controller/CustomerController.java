@@ -2,6 +2,7 @@ package com.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,7 +57,7 @@ public class CustomerController {
 		customer.getAddresses().forEach(ad -> addressRepository.save(ad));
 		Customer c = customerRepository.save(customer);
 		return c.getId()!=null? 
-				ResponseEntity.ok(customer.getId())
+				ResponseEntity.status(HttpStatus.CREATED).body(customer.getId())
 				:	ResponseEntity.badRequest().build();
 	}
 	
