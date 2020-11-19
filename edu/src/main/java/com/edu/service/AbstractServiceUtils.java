@@ -16,4 +16,5 @@ public abstract class AbstractServiceUtils {
 	private void initLogger() {
 		logger = LoggerFactory.getLogger(getClass());
 	}
+
 }

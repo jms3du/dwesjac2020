@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,15 +37,14 @@ public class CustomerServiceImpl extends AbstractServiceUtils implements IServic
 	@Autowired
 	private FileHandlerService fhService;
 	
-	
+	public final static String CUSTOM_QUERY = "Select * "
+													+ "from Customer "
+													+ "where lower(name) "
+													+ "like ?1";
 	
 	public Customer findByName(String name) {
 		Query query = entityManager
-				.createNativeQuery("Select * "
-									+ "from Customer "
-									+ "where lower(name) "
-									+ "like ?1"
-								, Customer.class);
+				.createNativeQuery(CUSTOM_QUERY, Customer.class);
 		query.setParameter(1, name);
 		Stream<Customer> customers = query.getResultStream();
 		entityManager.close();
@@ -92,5 +92,17 @@ public class CustomerServiceImpl extends AbstractServiceUtils implements IServic
 	}
 
 
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
+
+	public void setCustomerRepository(CustomerRepository customerRepository) {
+		this.customerRepository = customerRepository;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 	 
 }
