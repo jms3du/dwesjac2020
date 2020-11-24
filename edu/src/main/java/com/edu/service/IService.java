@@ -22,4 +22,8 @@ public interface IService<T> {
 	 */
 	public T addDocument(String id, MultipartFile mpf);
 	
+	public default void lll() {
+		
+	}
+	
 }

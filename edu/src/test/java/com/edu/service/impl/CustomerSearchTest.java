@@ -1,4 +1,4 @@
-package com.edu;
+package com.edu.service.impl;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,16 +34,20 @@ public class CustomerSearchTest {
 	
 	@BeforeEach
 	private void init() {
-		sut = new CustomerServiceImpl();
+		sut = new CustomerServiceImpl(mockedRepo, null);
 		mockedCustomer = mock(Customer.class);
 		// Mocking dependencies
 		mockedEM = mock(EntityManager.class);
-		mockedRepo = mock(CustomerRepository.class);
+		mockedRepo = Mockito.mock(CustomerRepository.class);
+		mockedCustomer = mock(Customer.class);
+
 		sut.setCustomerRepository(mockedRepo);
 		sut.setEntityManager(mockedEM);
 		sut.setLogger(mock(Logger.class));
 		
 	}
+	
+	
 
 	/*************************
 	 *  METHOD TO BE TESTED  *
@@ -82,7 +86,6 @@ public class CustomerSearchTest {
 	public void findByLongIDReturnsCustomer() {
 		try {
 			//	Mock
-			mockedCustomer = mock(Customer.class);
 			//	Behavior
 			Mockito.when(mockedRepo.findById(Mockito.any())).thenReturn(Optional.of(mockedCustomer));
 			//	Call
@@ -96,20 +99,26 @@ public class CustomerSearchTest {
 	
 	@Test
 	public void findByStringIDReturnsOnlyOneCustomer() {
-		try {
-			//	Mocks
+		try { 
 			Query mockedQuery = mock(Query.class);
 			Stream<Customer> mockedStream = mock(Stream.class);
-			//	Behavior
-			when(mockedEM.createNativeQuery(sut.CUSTOM_QUERY, Customer.class)).thenReturn(mockedQuery);
+			
 			when(mockedQuery.getResultStream()).thenReturn(mockedStream);
 			when(mockedStream.findAny()).thenReturn(Optional.of(mockedCustomer));
-			//	Call & check
-			assert(mockedCustomer==sut.findByID("lastCustomerSurname"));
-		}catch (Exception e) {
-			//	Check on fail
-			throw new AssertionError("Not allowed exception has been thrown");
+			when(mockedEM.createNativeQuery(sut.CUSTOM_QUERY, Customer.class)).thenReturn(mockedQuery);
 			
+			assert(sut.findByID("Cualquier cosa")!=null);
+			
+		} catch (Exception e) {
+			throw new AssertionError("Not allowed exception has been thrown");
 		}
+
 	}
 }
+
+
+
+
+
+
+
