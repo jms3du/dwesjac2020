@@ -49,8 +49,18 @@ public class User implements UserDetails{
 	private LocalDateTime deleteTime;
 	
 	private LocalDateTime lastPasswordChange;
+	
+	private boolean locked;
+	
+	private boolean enabled;
+	
+	private Integer authenticationAttempts;
+	
+	private LocalDateTime passwordPolicyExpDate;
 
 	private static final long serialVersionUID = 2046866248113544418L;
+	
+	private static final int MAX_AUTH_ATTEMPTS = 3;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,17 +84,17 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return this.getAuthenticationAttempts() < MAX_AUTH_ATTEMPTS;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return this.getLastPasswordChange().isBefore(this.passwordPolicyExpDate);
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return this.enabled;
 	}
 
 	public Long getId() {
@@ -141,6 +151,34 @@ public class User implements UserDetails{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public Integer getAuthenticationAttempts() {
+		return authenticationAttempts;
+	}
+
+	public void setAuthenticationAttempts(Integer authenticationAttempts) {
+		this.authenticationAttempts = authenticationAttempts;
+	}
+
+	public LocalDateTime getPasswordPolicyExpDate() {
+		return passwordPolicyExpDate;
+	}
+
+	public void setPasswordPolicyExpDate(LocalDateTime passwordPolicyExpDate) {
+		this.passwordPolicyExpDate = passwordPolicyExpDate;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

@@ -1,13 +1,12 @@
 package com.edu.service.impl;
 
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +14,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.NoInteractions;
 import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +22,6 @@ import com.edu.model.entity.Document;
 import com.edu.model.repo.CustomerRepository;
 import com.edu.model.repo.DocumentRepository;
 import com.edu.service.FileHandlerService;
-import com.mysql.cj.jdbc.Blob;
-
-import javassist.NotFoundException;
 
 
 public class CustomerDocumentHandlerTest {

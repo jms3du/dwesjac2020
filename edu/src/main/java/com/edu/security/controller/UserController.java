@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.edu.security.model.User;
 import com.edu.security.model.dto.UserDTO;
 import com.edu.security.service.UserService;
 
@@ -20,12 +19,19 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping("/")
-	private ResponseEntity<User> createNewUser(@RequestBody UserDTO user) {
+	
+	@PostMapping("/sign-up")
+	public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO userDTO) {
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(userService.createNewUser(user));
+			return ResponseEntity.status(HttpStatus.CREATED).body(userService.createNewUser(userDTO));
 		}catch(Exception ex) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO){
+		// Created only to retrieve the Bearer token once authenticated
+		return ResponseEntity.status(HttpStatus.OK).body(userDTO);
 	}
 }

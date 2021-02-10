@@ -1,12 +1,13 @@
 package com.edu.security.service;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.edu.security.model.User;
 import com.edu.security.model.dto.UserDTO;
 import com.edu.security.model.dto.UserDTOConverter;
 import com.edu.security.repo.UserRepository;
@@ -26,9 +27,13 @@ public class UserService implements UserDetailsService {
 				.orElseThrow(()-> new UsernameNotFoundException("Username not found"));
 	}
 	
+	public UserDetails loadUserById(Long idUser) throws AuthenticationException {
+		return repository.findById(idUser)
+				.orElseThrow(()-> new AuthenticationException("Id/username not found"));
+	}	
 	
-	public User createNewUser(UserDTO userDTO) {
-		return repository.save(converter.fromUserDTOToUser(userDTO)); 
+	public UserDTO createNewUser(UserDTO userDTO) {
+		return converter.fromUserToUserDTO(repository.save(converter.fromUserDTOToUser(userDTO))); 
 	}
 	
 
